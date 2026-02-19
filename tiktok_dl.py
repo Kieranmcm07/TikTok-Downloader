@@ -131,13 +131,13 @@ def has_ffmpeg() -> bool:
     return shutil.which("ffmpeg") is not None and shutil.which("ffprobe") is not None
 
 def print_ffmpeg_help(theme: "Theme") -> None:
-    print(f"\n{theme.C_RED}  [!] Audio-only requires FFmpeg (ffmpeg + ffprobe).{RESET}")
-    print(f"{theme.TEXT}      Install it, then restart the terminal / VS Code.{RESET}\n")
-    print(f"{theme.BORDER}      Fastest install (PowerShell):{RESET}")
-    print(f"{theme.TEXT}      winget install --id Gyan.FFmpeg{RESET}\n")
-    print(f"{theme.BORDER}      Check it works:{RESET}")
-    print(f"{theme.TEXT}      ffmpeg -version{RESET}")
-    print(f"{theme.TEXT}      ffprobe -version{RESET}\n")
+    print(f"{theme.C_RED}                      ╠   [!] Audio-only requires FFmpeg (ffmpeg + ffprobe).{RESET}")
+    print(f"{theme.TEXT}                      ╠   Install it, then restart the terminal / VS Code.{RESET}")
+    print(f"{theme.BORDER}                      ╠   Fastest install (PowerShell):{RESET}")
+    print(f"{theme.TEXT}                      ╠   winget install --id Gyan.FFmpeg{RESET}")
+    print(f"{theme.BORDER}                      ╠   Check it works:{RESET}")
+    print(f"{theme.TEXT}                      ╠   ffmpeg -version{RESET}")
+    print(f"{theme.TEXT}                      ╠   ffprobe -version{RESET}")
 
 def default_save_dir() -> str:
     base = os.path.join(os.path.expanduser("~"), "TikTok Downloads")
@@ -154,18 +154,18 @@ def check_deps() -> bool:
 
 
 def install_deps() -> None:
-    print(f"\n  Installing yt-dlp...\n")
+    print(f"                      ╠   Installing yt-dlp...")
     subprocess.check_call([sys.executable, "-m", "pip", "install", "-U", "yt-dlp"])
-    print("\n  Done.\n")
+    print("                      ╠   Done.")
 
 
 def update_yt_dlp(theme: Theme) -> None:
-    print(f"\n{theme.TEXT}  Updating yt-dlp...{RESET}\n")
+    print(f"{theme.TEXT}                      ╠   Updating yt-dlp...{RESET}")
     try:
         subprocess.check_call([sys.executable, "-m", "pip", "install", "-U", "yt-dlp"])
-        print(f"\n{theme.C_204}  [+] yt-dlp updated.{RESET}\n")
+        print(f"{theme.C_204}                      ╠   [+] yt-dlp updated.{RESET}")
     except subprocess.CalledProcessError as e:
-        print(f"\n{theme.C_RED}  [!] Update failed: {e}{RESET}\n")
+        print(f"{theme.C_RED}                      ╠   [!] Update failed: {e}{RESET}")
 
 
 def get_clipboard_text() -> Optional[str]:
@@ -268,15 +268,19 @@ def draw_ui(save_dir: str, theme: Theme, status: str, stealth_on: bool) -> None:
 
 
 def choose_quality(theme: Theme) -> str:
-    print(f"\n{theme.TEXT}  Choose quality:{RESET}")
+    print(f"{theme.TEXT}                      ╠   Choose quality:{RESET}")
     if not has_ffmpeg():
-        print(f"{theme.C_RED}  [!] FFmpeg not found — audio-only will fail until you install it.{RESET}")
-    print(f"{theme.BORDER}  [1]{RESET} Best (default)")
-    print(f"{theme.BORDER}  [2]{RESET} 1080p max")
-    print(f"{theme.BORDER}  [3]{RESET} 720p max")
-    print(f"{theme.BORDER}  [4]{RESET} 480p max")
-    print(f"{theme.BORDER}  [5]{RESET} Audio only (requires FFmpeg)")
-    q = input(f"{theme.TEXT}  > {RESET}").strip() or "1"
+        print(f"{theme.C_RED}                      ╠   [!] FFmpeg not found — audio-only will fail until you install it.{RESET}")
+    print(f"{theme.BORDER}                      ╠   [1]{RESET} Best (default)")
+    print(f"{theme.BORDER}                      ╠   [2]{RESET} 1080p max")
+    print(f"{theme.BORDER}                      ╠   [3]{RESET} 720p max")
+    print(f"{theme.BORDER}                      ╠   [4]{RESET} 480p max")
+    print(f"{theme.BORDER}                      ╠   [5]{RESET} Audio only (requires FFmpeg)")
+    
+
+    
+    
+    q = input(f"{theme.TEXT}                      ╠  > {RESET}").strip() or "1"
     return q
 
 
@@ -297,17 +301,17 @@ def format_for_choice(choice: str) -> str:
 def prompt_url(theme: Theme) -> Optional[str]:
     clip = get_clipboard_text()
     if clip and is_tiktok_url(clip):
-        print(f"\n{theme.C_204}  Clipboard URL detected:{RESET} {clip}")
-        use = input(f"{theme.TEXT}  Use clipboard URL? (Y/n): {RESET}").strip().lower()
+        print(f"{theme.C_204}                      ╠   Clipboard URL detected:{RESET} {clip}")
+        use = input(f"{theme.TEXT}                      ╠   Use clipboard URL? (Y/n): > {RESET}").strip().lower()
         if use in ("", "y", "yes"):
             return clip
 
     print(f"{theme.TEXT}                      ╠   Paste the TikTok video URL below:{RESET}")
-    url = input(f"{theme.TEXT}                        > {RESET}").strip()
+    url = input(f"{theme.TEXT}                      ╠  > {RESET}").strip()
     if not url:
         return None
     if not is_tiktok_url(url):
-        print(f"\n{theme.C_RED}  [!] That doesn't look like a TikTok URL. Try again.{RESET}\n")
+        print(f"{theme.C_RED}                      ╠   [!] That doesn't look like a TikTok URL. Try again.{RESET}")
         return None
     return url
 
@@ -361,10 +365,10 @@ def human_time(ts: float) -> str:
 def view_history(theme: Theme) -> None:
     items = read_history(limit=50)
     if not items:
-        print(f"\n{theme.TEXT}  No history yet.{RESET}\n")
+        print(f"{theme.TEXT}                      ╠   No history yet.{RESET}")
         return
 
-    print(f"\n{theme.C_204}  Last {len(items)} downloads:{RESET}\n")
+    print(f"{theme.C_204}                      ╠   Last {len(items)} downloads:{RESET}")
     for i, it in enumerate(reversed(items), 1):
         status = it.get("status", "unknown")
         when = human_time(float(it.get("ts", time.time())))
@@ -377,7 +381,7 @@ def view_history(theme: Theme) -> None:
             print(f"       OUT: {out}")
         print()
 
-    choice = input(f"{theme.TEXT}  Open output folder of most recent? (y/N): {RESET}").strip().lower()
+    choice = input(f"{theme.TEXT}                      ╠   Open output folder of most recent? (y/N): {RESET}").strip().lower()
     if choice in ("y", "yes"):
         most_recent = items[-1]
         out = most_recent.get("output_dir") or most_recent.get("output")
@@ -415,12 +419,12 @@ def download_video(url: str, save_dir: str, quality_choice: str, theme: Theme) -
             spd = d.get("speed") or 0
             eta = d.get("eta") or 0
             sys.stdout.write(
-                f"\r{theme.TEXT}  Downloading... {pct:5.1f}% | "
+                f"\r{theme.TEXT}                      ╠   Downloading... {pct:5.1f}% | "
                 f"{(spd/1024/1024):.2f} MiB/s | ETA {eta:>3}s{RESET}   "
             )
             sys.stdout.flush()
         elif status == "finished":
-            sys.stdout.write(f"\r{theme.C_204}  [+] Download finished. Processing...{RESET}            \n")
+            sys.stdout.write(f"\r{theme.C_204}                      ╠   [+] Download finished. Processing...{RESET}            ")
             sys.stdout.flush()
         # Track filename if provided
         fn = d.get("filename")
@@ -465,10 +469,10 @@ def download_video(url: str, save_dir: str, quality_choice: str, theme: Theme) -
             out_path = os.path.abspath(out_path)
 
         elapsed = time.time() - started
-        print(f"\n{theme.C_204}  [+] Done in {elapsed:.1f}s.{RESET}")
+        print(f"{theme.C_204}  ╠   [+] Done in {elapsed:.1f}s.{RESET}")
         if out_path:
-            print(f"{theme.C_204}  [+] Saved file:{RESET} {out_path}")
-        print(f"{theme.C_204}  [+] Output folder:{RESET} {os.path.abspath(save_dir)}\n")
+            print(f"{theme.C_204}                      ╠   [+] Saved file:{RESET} {out_path}")
+        print(f"{theme.C_204}                      ╠   [+] Output folder:{RESET} {os.path.abspath(save_dir)}")
 
         log_history({
             "ts": time.time(),
@@ -482,15 +486,15 @@ def download_video(url: str, save_dir: str, quality_choice: str, theme: Theme) -
         # Copy path to clipboard (file if known, else dir)
         to_copy = out_path or os.path.abspath(save_dir)
         if set_clipboard_text(to_copy):
-            print(f"{theme.TEXT}  (Copied to clipboard) {to_copy}{RESET}\n")
+            print(f"{theme.TEXT}                      ╠   (Copied to clipboard) {to_copy}{RESET}")
 
         # Auto-open folder
         open_folder(os.path.abspath(save_dir))
         return out_path
 
     except Exception as e:
-        print(f"\n{theme.C_RED}  [!] Download failed: {e}{RESET}\n")
-        print(f"{theme.TEXT}      Tip: Make sure the URL is correct and the account is public.{RESET}\n")
+        print(f"{theme.C_RED}                      ╠   [!] Download failed: {e}{RESET}")
+        print(f"{theme.TEXT}                      ╠   Tip: Make sure the URL is correct and the account is public.{RESET}")
         log_history({
             "ts": time.time(),
             "url": url,
@@ -504,13 +508,13 @@ def download_video(url: str, save_dir: str, quality_choice: str, theme: Theme) -
 
 
 def change_folder(current: str, theme: Theme) -> str:
-    print(f"\n{theme.TEXT}  Current folder:{RESET} {theme.C_204}{os.path.abspath(current)}{RESET}")
-    new = input(f"{theme.TEXT}  Enter new folder path (or press Enter to keep current): {RESET}").strip()
+    print(f"{theme.TEXT}                      ╠   Current folder:{RESET} {theme.C_204}{os.path.abspath(current)}{RESET}")
+    new = input(f"{theme.TEXT}                      ╠   Enter new folder path (or press Enter to keep current): {RESET}").strip()
     if not new:
         return current
     new_norm = normalize_path(new)
     os.makedirs(new_norm, exist_ok=True)
-    print(f"\n{theme.C_204}  [+] Output folder set to:{RESET} {new_norm}\n")
+    print(f"{theme.C_204}                      ╠   [+] Output folder set to:{RESET} {new_norm}")
     return new_norm
 
 
@@ -538,19 +542,19 @@ def main() -> None:
                 status = "Downloading"
                 download_video(url, save_dir, q, theme)
                 status = "Ready"
-            input(f"{theme.TEXT}  Press Enter to return to menu...{RESET}")
+            input(f"{theme.TEXT}                      ╠   Press Enter to return to menu...{RESET}")
 
         elif choice == "2":
             status = "Changing folder"
             save_dir = change_folder(save_dir, theme)
             status = "Ready"
-            input(f"{theme.TEXT}  Press Enter to return to menu...{RESET}")
+            input(f"{theme.TEXT}                      ╠   Press Enter to return to menu...{RESET}")
 
         elif choice == "3":
             status = "Viewing history"
             view_history(theme)
             status = "Ready"
-            input(f"{theme.TEXT}  Press Enter to return to menu...{RESET}")
+            input(f"{theme.TEXT}                      ╠   Press Enter to return to menu...{RESET}")
 
         elif choice == "4":
             stealth_on = not stealth_on
@@ -563,16 +567,16 @@ def main() -> None:
             status = "Updating yt-dlp"
             update_yt_dlp(theme)
             status = "Ready"
-            input(f"{theme.TEXT}  Press Enter to return to menu...{RESET}")
+            input(f"{theme.TEXT}                      ╠   Press Enter to return to menu...{RESET}")
 
         elif choice == "6":
-            print(f"\n{theme.TEXT}  Later!{RESET}\n")
+            print(f"{theme.TEXT}                      ╠   Later!{RESET}")
             break
 
         else:
             status = "Invalid option"
-            print(f"\n{theme.C_RED}  [!] Invalid option. Pick 1-6.{RESET}\n")
-            input(f"{theme.TEXT}  Press Enter to continue...{RESET}")
+            print(f"{theme.C_RED}                      ╠   [!] Invalid option. Pick 1-6.{RESET}")
+            input(f"{theme.TEXT}                      ╠   Press Enter to continue...{RESET}")
             status = "Ready"
 
 
