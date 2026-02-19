@@ -303,7 +303,7 @@ def prompt_url(theme: Theme) -> Optional[str]:
             return clip
 
     print(f"{theme.TEXT}                      ╠   Paste the TikTok video URL below:{RESET}")
-    url = input(f"{theme.TEXT}  > {RESET}").strip()
+    url = input(f"{theme.TEXT}                        > {RESET}").strip()
     if not url:
         return None
     if not is_tiktok_url(url):
